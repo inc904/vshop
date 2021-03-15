@@ -1,15 +1,12 @@
 <template>
-  <div>
-      cart
-  </div>
+  <div>cart</div>
 </template>
 
 <script>
 export default {
-// name: 'cart'
-}
+  // name: 'cart'
+};
 </script>
 
 <style>
-
 </style>
