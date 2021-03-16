@@ -1,0 +1,15 @@
+.line1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mr5 {
+  margin-right: 5px;
+}
+.ml5 {
+  margin-left: 5px;
+}
+.acea-row {
+  display: flex;
+  flex-wrap: wrap;
+}
