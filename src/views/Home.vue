@@ -1,9 +1,9 @@
 <template>
   <div class="home-page">
     <!-- S_swiper -->
-    <van-swipe class="my-swipe " :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="(image, index) in swiperImages" :key="index">
-        <img v-lazy="image" />
+    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+      <van-swipe-item v-for="image in banner" :key="image.id">
+        <img v-lazy="image.pic" />
       </van-swipe-item>
     </van-swipe>
     <!-- E_swiper -->
@@ -14,12 +14,12 @@
         <p>{{ item.text }}</p>
       </div>
     </div> -->
-    <van-grid class="hidden">
+    <van-grid class="menus-tab">
       <van-grid-item
-        v-for="(item, index) in menusTab"
-        :key="index"
-        :icon="item.imgUrl"
-        :text="item.text"
+        v-for="item in menus"
+        :key="item.id"
+        :icon="item.pic"
+        :text="item.name"
       />
     </van-grid>
     <!-- E_MenusTable -->
@@ -70,14 +70,14 @@
         />
       </van-cell-group>
       <div class="goods">
-        <div class="item">
+        <div class="item" v-for="item in best" :key="item.id">
           <van-card
-            num="2"
-            price="2.00"
-            origin-price="10.00"
-            desc="无敌"
-            title="ipad Pro"
-            thumb="https://img01.yzcdn.cn/vant/ipad.jpeg"
+            num="1"
+            :price="item.price"
+            :origin-price="item.ot_price"
+            :desc="item.unit_name"
+            :title="item.store_name"
+            :thumb="item.image"
           >
             <template #tags>
               <van-tag plain type="danger" class="mr5">新品</van-tag>
@@ -107,9 +107,9 @@
         </div>
       </div>
       <div class="list acea-row">
-        <div class="item" v-for="(item, index) in hotlist" :key="index">
-          <img :src="item.imgUrl" alt="" />
-          <p class="goodstitle line1">{{ item.title }}</p>
+        <div class="item" v-for="(item, index) in hot" :key="index">
+          <img :src="item.image" alt="" />
+          <p class="goodstitle line1">{{ item.store_name }}</p>
           <p class="price">￥{{ item.price }}</p>
         </div>
       </div>
@@ -125,9 +125,9 @@
         <div class="more">更多></div>
       </div>
       <div class="newgoods-list">
-        <div class="item" v-for="(item, index) in hotlist" :key="index">
-          <img :src="item.imgUrl" alt="" />
-          <div class="info line1">{{ item.title }}</div>
+        <div class="item" v-for="item in newPro" :key="item.id">
+          <img :src="item.image" alt="" />
+          <div class="info line1">{{ item.store_name }}</div>
           <div class="price">￥{{ item.price }}</div>
         </div>
         <div class="item" v-for="(item, index) in hotlist" :key="index + 100">
@@ -142,57 +142,16 @@
 </template>
 
 <script>
-import { getHomeData } from '@/api/home.js'
+import { HomeData } from '@/api/home.js'
 export default {
   name: 'home',
   data() {
     return {
-      swiperImages: [
-        'https://img01.yzcdn.cn/vant/apple-1.jpg',
-        'https://img01.yzcdn.cn/vant/apple-2.jpg',
-      ],
-      menusTab: [
-        {
-          imgUrl:
-            'http://demo26.crmeb.net/uploads/attach/2021/02/20210202/dbe45cf74bba27f87e78560de8e6e6d7.png',
-          text: '商品分类',
-        },
-        {
-          imgUrl:
-            'http://demo26.crmeb.net/uploads/attach/2021/02/20210202/dbe45cf74bba27f87e78560de8e6e6d7.png',
-          text: '商品分类',
-        },
-        {
-          imgUrl:
-            'http://demo26.crmeb.net/uploads/attach/2021/02/20210202/dbe45cf74bba27f87e78560de8e6e6d7.png',
-          text: '商品分类',
-        },
-        {
-          imgUrl:
-            'http://demo26.crmeb.net/uploads/attach/2021/02/20210202/dbe45cf74bba27f87e78560de8e6e6d7.png',
-          text: '商品分类',
-        },
-        {
-          imgUrl:
-            'http://demo26.crmeb.net/uploads/attach/2021/02/20210202/dbe45cf74bba27f87e78560de8e6e6d7.png',
-          text: '商品分类',
-        },
-        {
-          imgUrl:
-            'http://demo26.crmeb.net/uploads/attach/2021/02/20210202/dbe45cf74bba27f87e78560de8e6e6d7.png',
-          text: '商品分类',
-        },
-        {
-          imgUrl:
-            'http://demo26.crmeb.net/uploads/attach/2021/02/20210202/dbe45cf74bba27f87e78560de8e6e6d7.png',
-          text: '商品分类',
-        },
-        {
-          imgUrl:
-            'http://demo26.crmeb.net/uploads/attach/2021/02/20210202/dbe45cf74bba27f87e78560de8e6e6d7.png',
-          text: '商品分类',
-        },
-      ],
+      banner: [],
+      menus: [],
+      newPro: [],
+      best: [],
+      hot: [],
       hotlist: [
         {
           imgUrl:
@@ -220,8 +179,17 @@ export default {
   },
   methods: {
     async getHomeData() {
-      let res = await getHomeData()
+      let res = await HomeData()
+      let {
+        data: { banner, menus, newPro, hot, best },
+      } = res
+      console.log(banner, Array.isArray(banner))
       console.log(res)
+      this.banner = banner
+      this.menus = menus
+      this.newPro = newPro
+      this.hot = hot
+      this.best = best
     },
   },
 }
@@ -267,17 +235,22 @@ export default {
   .menus-tab {
     display: flex;
     flex-wrap: wrap;
-    .menu-item {
+    margin-top: 15px;
+    .van-grid-item {
       width: 25%;
-      margin-top: 15px;
-      img {
-        width: 41px;
-        height: 41px;
-      }
-      p {
-        font-size: 12px;
-        color: #333;
-        margin: 7px 0 0;
+      .van-grid-item__content {
+        background-color: red;
+        .van-icon.van-grid-item__icon {
+          .van-icon__image {
+            width: 41px;
+            height: 41px;
+          }
+        }
+        .van-grid-item__text {
+          font-size: 12px;
+          color: #333;
+          margin: 7px 0 0;
+        }
       }
     }
   }
@@ -406,6 +379,7 @@ export default {
       padding: 0 11px;
       box-shadow: 0 0 15px -5px #aaa;
       align-items: center;
+      justify-content: space-between;
       .item {
         width: 30%;
         img {
