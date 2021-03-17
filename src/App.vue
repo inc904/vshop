@@ -5,7 +5,6 @@
     <!-- <router-link name="home">home</router-link> -->
 
     <router-view />
-    <p class="test">HelloWorld</p>
     <van-tabbar route v-model="active" active-color="#fc4141">
       <van-tabbar-item to="/home" icon="home-o">首页</van-tabbar-item>
       <van-tabbar-item to="/category" icon="bag-o">分类</van-tabbar-item>

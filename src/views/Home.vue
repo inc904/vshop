@@ -1,12 +1,11 @@
 <template>
   <div class="home-page">
     <!-- S_swiper -->
-    <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="image in banner" :key="image.id">
-        <img v-lazy="image.pic" />
-      </van-swipe-item>
-    </van-swipe>
+    <div class="swiper">
+      <v-slider :banner="banner" />
+    </div>
     <!-- E_swiper -->
+
     <!-- S_MenusTable -->
     <!-- <div class="menus-tab">
       <div class="menu-item" v-for="(item, index) in menusTab" :key="index">
@@ -60,7 +59,7 @@
     </div>
     <!-- E_specialArea -->
     <!-- S_goodslist -->
-    <div class="goodsList ">
+    <div class="goodsList">
       <van-cell-group>
         <van-cell
           title="精品推荐"
@@ -101,9 +100,7 @@
             <span class="label">热门榜单</span>
             根据销量、搜索、好评等综合得出
           </div>
-          <div class="more">
-            更多 >
-          </div>
+          <div class="more">更多 ></div>
         </div>
       </div>
       <div class="list acea-row">
@@ -117,7 +114,7 @@
     <!-- E_goodslist -->
     <!-- S_newlist -->
     <div class="newproduct">
-      <div class="title acea-row ">
+      <div class="title acea-row">
         <div class="text">
           <div class="t-title">首发新品 <span>new~</span></div>
           <div class="sub-title">多个优质商品最新上架</div>
@@ -142,7 +139,8 @@
 </template>
 
 <script>
-import { HomeData } from '@/api/home.js'
+import { homeData, goodsDetailData } from '@/api/'
+import VSlider from '@/components/VSlider.vue'
 export default {
   name: 'home',
   data() {
@@ -174,12 +172,16 @@ export default {
       ],
     }
   },
+  components: {
+    VSlider,
+  },
   mounted() {
     this.getHomeData()
+    this.getGoodsDetailData()
   },
   methods: {
     async getHomeData() {
-      let res = await HomeData()
+      let res = await homeData()
       let {
         data: { banner, menus, newPro, hot, best },
       } = res
@@ -190,6 +192,14 @@ export default {
       this.newPro = newPro
       this.hot = hot
       this.best = best
+      let arr = best.map((item) => {
+        return item.id
+      })
+      console.log('arr', arr)
+    },
+    async getGoodsDetailData() {
+      let res = await goodsDetailData(63)
+      console.log(res)
     },
   },
 }
@@ -200,37 +210,8 @@ export default {
   .hidden {
     display: none;
   }
-  .my-swipe.van-swipe {
-    .van-swipe-item {
-      color: #fff;
-      font-size: 20px;
-      height: 187px;
-      text-align: center;
-      background-color: #39a9ed;
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .van-swipe__indicators {
-      background-color: #fc4141;
-      .van-swipe__indicator {
-        border-radius: 20%;
-        width: 80px;
-        color: #fff;
-        background-color: #fff;
-      }
-    }
-    .custom-indicator {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      display: -webkit-box;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-transform: translateX(-50%);
-      transform: translateX(-50%);
-    }
+  .swiper {
+    height: 187px;
   }
   .menus-tab {
     display: flex;

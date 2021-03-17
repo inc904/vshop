@@ -12,6 +12,7 @@ const Home = () => import('@/views/Home')
 const Cart = () => import('@/views/Cart')
 const Category = () => import('@/views/Category')
 const User = () => import('@/views/User')
+const GoodsDetail = () => import('@/views/goods/GoodsDetail')
 
 
 export default new VueRouter({
@@ -39,6 +40,11 @@ export default new VueRouter({
             path: '/user',
             name: 'user',
             component: User
+        },
+        {
+            path: '/goodsdetail',
+            name: 'goodsdetail',
+            component: GoodsDetail
         }
 
     ]

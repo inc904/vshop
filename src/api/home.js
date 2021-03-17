@@ -1,7 +1,7 @@
 import http from '@/util/http.js'
 
-export async function HomeData() {
-  let url = '/auth_api/index'
+export async function homeData() {
+  let url = '/index'
   const {
     data: { data },
   } = await http.post(url)
